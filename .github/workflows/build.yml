@@ -47,12 +47,15 @@ jobs:
 
 #      - name: Run pylint
 #        run: poetry run pylint symphony tests
-
-      - name: GitHub Action for pylint
+#
+#      - name: GitHub Action for pylint
+#        if: matrix.os == 'ubuntu-latest'
+#        uses: cclauss/GitHub-Action-for-pylint@0.7.0
+#        with:
+#          args: poetry run pylint symphony tests
+      - name: pylint-and-format
         if: matrix.os == 'ubuntu-latest'
-        uses: cclauss/GitHub-Action-for-pylint@0.7.0
-        with:
-          args: pip install . ; pylint **/*.py
+        uses: itsvinayak/pylint-and-format@v1.1
 #      - name: Run pylint
 #        if: matrix.os == 'ubuntu-latest'
 #        uses: abatilo/actions-poetry@v1.1.0
