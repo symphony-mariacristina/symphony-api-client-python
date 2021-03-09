@@ -22,15 +22,15 @@ async def offset_based_pagination(func: Callable[[int, int], Awaitable[T]],
         return
 
     skip = 0
-    item_count = 0
+    itemCount = 0
 
     chunk = await func(skip, chunk_size)
     while chunk:
         for item in chunk:
             yield item
 
-            item_count += 1
-            if max_number is not None and item_count == max_number:
+            itemCount += 1
+            if max_number is not None and itemCount == max_number:
                 # max_number items already retrieved
                 return
 
