@@ -45,14 +45,9 @@ jobs:
       - name: Run tests with coverage
         run: poetry run pytest
 
-#      - name: Python Pylin GitHub Action
-#        uses: fylein/python-pylint-github-action@v1
-#        with:
-#          args: pip3 install -r requirements.txt && pylint --rcfile=.pylintrc symphony tests
-      - name: Run pylint
-        uses: abatilo/actions-poetry@v1.1.0
+      - name: Python Pylin GitHub Action
+        uses: fylein/python-pylint-github-action@v1
         with:
-          working_directory: $GITHUB_WORKSPACE/opt/
           args: poetry run pylint symphony tests
 
       - name: Upload test results
