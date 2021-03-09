@@ -45,17 +45,22 @@ jobs:
       - name: Run tests with coverage
         run: poetry run pytest
 
+#      - name: Run Pylint
+#        if: matrix.os == 'ubuntu-latest'
+#        uses: ricardochaves/python-lint@v1.3.0
+#        with:
+#          python-root-list: "symphony tests"
+#          use-pylint: true
+#          use-pycodestyle: false
+#          use-flake8: false
+#          use-black: false
+#          use-mypy: false
+#          use-isort: false
       - name: Run Pylint
-        if: matrix.os == 'ubuntu-latest'
-        uses: ricardochaves/python-lint@v1.3.0
+        uses: kolonialno/pylint-action@v0.0.8
         with:
-          python-root-list: "symphony tests"
-          use-pylint: true
-          use-pycodestyle: false
-          use-flake8: false
-          use-black: false
-          use-mypy: false
-          use-isort: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          diff-against-branch: 2.0
 
       - name: Upload test results
         uses: actions/upload-artifact@v2
@@ -70,7 +75,3 @@ jobs:
           name: pytest-coverage-${{ matrix.os }}
           path: htmlcov
         if: ${{ always() }}
-
-      - name: Upload pylint run results
-        if: matrix.os == 'ubuntu-latest'
-        run: ll
