@@ -46,19 +46,8 @@ jobs:
         run: poetry run pytest
 
       - name: Run Pylint
+        if: matrix.os == 'ubuntu-latest'
         run: poetry run pylint symphony tests
-
-#      - name: Run Pylint
-#        if: matrix.os == 'ubuntu-latest'
-#        uses: ricardochaves/python-lint@v1.3.0
-#        with:
-#          python-root-list: "symphony tests"
-#          use-pylint: true
-#          use-pycodestyle: false
-#          use-flake8: false
-#          use-black: false
-#          use-mypy: false
-#          use-isort: false
 
       - name: Upload test results
         uses: actions/upload-artifact@v2
@@ -78,5 +67,5 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v2
         with:
-          name: .pylint.d
+          name: '~/.pylint.d'
           path: '~/.pylint.d'
