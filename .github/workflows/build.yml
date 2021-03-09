@@ -21,7 +21,10 @@ jobs:
             path: ~\AppData\Local\pypoetry\Cache\virtualenvs
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
@@ -64,8 +67,11 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_PYTHON_PYLINT: true
-          FILTER_REGEX_INCLUDE: .*symphony/bdk/core.*
-#          PYTHON_PYLINT_CONFIG_FILE: ~/.pylintrc
+          DEFAULT_BRANCH: "2.0"
+          FILTER_REGEX_INCLUDE: .*symphony/.*
+          OUTPUT_FOLDER: pylint-results
+          LINTER_RULES_PATH: /
+          PYTHON_PYLINT_CONFIG_FILE: .pylintrc
 
       - name: Upload test results
         uses: actions/upload-artifact@v2
@@ -87,3 +93,9 @@ jobs:
 #        with:
 #          name: .pylint.d
 #          path: ~/.pylint.d
+      - name: Upload pylint results
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v2
+        with:
+          name: pylint-results-${{ matrix.os }}
+          path: pylint-results
