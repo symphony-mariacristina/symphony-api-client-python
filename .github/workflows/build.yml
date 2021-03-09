@@ -52,10 +52,10 @@ jobs:
 #        if: matrix.os == 'ubuntu-latest'
 #        uses: cclauss/GitHub-Action-for-pylint@0.7.0
 #        with:
-#          args: poetry run pylint symphony tests
-      - name: pylint-and-format
-        if: matrix.os == 'ubuntu-latest'
-        uses: itsvinayak/pylint-and-format@v1.1
+#          args: pip install poetry | poetry run pylint symphony tests
+#      - name: pylint-and-format
+#        if: matrix.os == 'ubuntu-latest'
+#        uses: itsvinayak/pylint-and-format@v1.1
 #      - name: Run pylint
 #        if: matrix.os == 'ubuntu-latest'
 #        uses: abatilo/actions-poetry@v1.1.0
@@ -74,6 +74,17 @@ jobs:
 #          use-black: false
 #          use-mypy: false
 #          use-isort: false
+      - name: Pylint run
+        if: matrix.os == 'ubuntu-latest'
+        uses: ricardochaves/python-lint@v1.3.0
+        with:
+          python-root-list: "symphony tests"
+          use-pylint: true
+          use-pycodestyle: false
+          use-flake8: false
+          use-black: false
+          use-mypy: false
+          use-isort: false
 
       - name: Upload test results
         uses: actions/upload-artifact@v2
