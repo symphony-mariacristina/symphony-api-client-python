@@ -45,6 +45,15 @@ jobs:
       - name: Run tests with coverage
         run: poetry run pytest
 
+      - name: Download workflow artifact for pylint diff
+        if: matrix.os == 'ubuntu-latest'
+        uses: dawidd6/action-download-artifact@v2.12.0
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          name: .pylint.d
+          path: ~/.pylint.d
+
       - name: Run Pylint
         if: matrix.os == 'ubuntu-latest'
         run: poetry run pylint symphony tests
@@ -67,5 +76,5 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v2
         with:
-          name: '~/.pylint.d'
-          path: '~/.pylint.d'
+          name: .pylint.d
+          path: ~/.pylint.d
