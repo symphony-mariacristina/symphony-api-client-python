@@ -45,36 +45,7 @@ jobs:
       - name: Run tests with coverage
         run: poetry run pytest
 
-#      - name: Run pylint
-#        run: poetry run pylint symphony tests
-#
-#      - name: GitHub Action for pylint
-#        if: matrix.os == 'ubuntu-latest'
-#        uses: cclauss/GitHub-Action-for-pylint@0.7.0
-#        with:
-#          args: pip install poetry | poetry run pylint symphony tests
-#      - name: pylint-and-format
-#        if: matrix.os == 'ubuntu-latest'
-#        uses: itsvinayak/pylint-and-format@v1.1
-#      - name: Run pylint
-#        if: matrix.os == 'ubuntu-latest'
-#        uses: abatilo/actions-poetry@v1.1.0
-#        with:
-#          python_version: 3.8
-#          poetry_version: 1.0.3
-#          working_directory: $GITHUB_WORKSPACE/opt/
-#          args: run pylint --rcfile pyproject.toml scopeserver
-#      - name: Pylint run
-#        if: matrix.os == 'ubuntu-latest'
-#        uses: ricardochaves/python-lint@v1.3.0
-#        with:
-#          use-pylint: true
-#          use-pycodestyle: false
-#          use-flake8: false
-#          use-black: false
-#          use-mypy: false
-#          use-isort: false
-      - name: Pylint run
+      - name: Run Pylint
         if: matrix.os == 'ubuntu-latest'
         uses: ricardochaves/python-lint@v1.3.0
         with:
@@ -99,3 +70,7 @@ jobs:
           name: pytest-coverage-${{ matrix.os }}
           path: htmlcov
         if: ${{ always() }}
+
+      - name: Upload pylint run results
+        if: matrix.os == 'ubuntu-latest'
+        run: ll
