@@ -45,8 +45,13 @@ jobs:
       - name: Run tests with coverage
         run: poetry run pytest
 
-      - name: Run pylint
-        run: poetry run pylint symphony tests
+#      - name: Run pylint
+#        run: poetry run pylint symphony tests
+
+      - name: GitHub Action for pylint
+        uses: PyCQA/pylint/github_actions@master
+        with:
+          args: pip install . ; pylint **/*.py
 
       - name: Upload test results
         uses: actions/upload-artifact@v2
