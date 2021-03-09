@@ -45,18 +45,27 @@ jobs:
       - name: Run tests with coverage
         run: poetry run pytest
 
-      - name: Download workflow artifact for pylint diff
-        if: matrix.os == 'ubuntu-latest'
-        uses: dawidd6/action-download-artifact@v2.12.0
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          name: .pylint.d
-          path: ~/.pylint.d
+#      - name: Download workflow artifact for pylint diff
+#        if: matrix.os == 'ubuntu-latest'
+#        uses: dawidd6/action-download-artifact@v2.12.0
+#        with:
+#          workflow: build.yml
+#          workflow_conclusion: success
+#          name: .pylint.d
+#          path: ~/.pylint.d
+
+#      - name: Run Pylint
+#        if: matrix.os == 'ubuntu-latest'
+#        run: poetry run pylint symphony tests
 
       - name: Run Pylint
         if: matrix.os == 'ubuntu-latest'
-        run: poetry run pylint symphony tests
+        uses: github/super-linter@v3.14.0
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_PYTHON_PYLINT: true
+          FILTER_REGEX_INCLUDE: .*symphony/bdk/core.*
+#          PYTHON_PYLINT_CONFIG_FILE: ~/.pylintrc
 
       - name: Upload test results
         uses: actions/upload-artifact@v2
@@ -72,9 +81,9 @@ jobs:
           path: htmlcov
         if: ${{ always() }}
 
-      - name: Upload pylint results
-        if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v2
-        with:
-          name: .pylint.d
-          path: ~/.pylint.d
+#      - name: Upload pylint results
+#        if: matrix.os == 'ubuntu-latest'
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: .pylint.d
+#          path: ~/.pylint.d
