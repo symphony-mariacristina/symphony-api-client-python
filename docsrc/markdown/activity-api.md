@@ -154,6 +154,39 @@ class HelpCommandActivity(SlashCommandActivity):
         return await self._messages.send_message(context.stream_id, "<messageML>Help command triggered</messageML>")
 ```
 
+### Help Command
+The _help_ command is a BDK build-in command which lists all the commands registered in the ActivityRegistry of the BDK. 
+It can be triggered by using:
+```
+$ @BotMention /help
+```
+The help command can be instantiated by passing an `ActivityRegistry` and `MessageService` instances to the constructor,
+then added manually to the BDK activity registry
+```python
+import logging
+
+from symphony.bdk.core.activity.command import CommandContext
+from symphony.bdk.core.activity.help_command import HelpCommand
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
+
+async def run():
+    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
+
+    async with SymphonyBdk(config) as bdk:
+        activities = bdk.activities()
+        messages = bdk.messages()
+
+        @activities.slash("/hello", True, "Command to say hello")
+        async def callback(context: CommandContext):
+            logging.debug("Hello slash command triggered by user %s", context.initiator.user.display_name)
+
+        bdk.activities().register(HelpCommand(activities, messages))
+
+        await bdk.datafeed().start()
+```
+One can also override the default implementation of the help command by manually defining a new `SlashCommandActivity`.
+
 ## Form Activity
 A form activity is triggered when an end-user replies or submits an Elements form.
 

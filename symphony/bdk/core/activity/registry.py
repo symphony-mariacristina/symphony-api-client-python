@@ -41,27 +41,33 @@ class ActivityRegistry(RealTimeEventListener):
         self._session_service = session_service
         self._bot_display_name = None
 
+    @property
+    def activity_list(self):
+        return self._activity_list
+
     def register(self, activity: AbstractActivity):
         """Registers an activity.
 
         :param activity: any object inheriting from base :class:`AbstractActivity`
         """
-        logger.debug('Registering new activity %s', activity)
+        logger.debug("Registering new activity %s", activity)
+        self._pre_process_activity(activity)
         self._activity_list.append(activity)
 
-    def slash(self, command: str, mention_bot: bool = True):
-        """Decorator around a listener callback coroutine wich takes a
+    def slash(self, command: str, mention_bot: bool = True, description: str = ""):
+        """Decorator around a listener callback coroutine which takes a
         :py:class:`~symphony.bdk.core.activity.command.CommandContext` as single parameter and returns nothing.
         This registers a new :py:class:`~symphony.bdk.core.activity.command.SlashCommandActivity`
         which executes the decorated coroutine if a message is matching.
 
-        :param command: the command name e.g. '/hello'
+        :param command: the command name e.g. "/hello"
         :param mention_bot: if user should mention the bot to trigger the slash command
+        :param description: description of the command activity
         :return: None
         """
         def decorator(func):
             logger.debug("Registering slash command with command=%s, mention_bot=%s", command, mention_bot)
-            self.register(SlashCommandActivity(command, mention_bot, func))
+            self.register(SlashCommandActivity(command, mention_bot, func, description))
             return func
 
         return decorator
@@ -101,4 +107,4 @@ class ActivityRegistry(RealTimeEventListener):
         if self._bot_display_name is None:
             session = await self._session_service.get_session()
             self._bot_display_name = session.display_name
-            logger.debug('Bot display name is : %s', self._bot_display_name)
+            logger.debug("Bot display name is : %s", self._bot_display_name)
